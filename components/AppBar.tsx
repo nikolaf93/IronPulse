@@ -9,6 +9,7 @@ import {
   Switch,
   Alert,
   Animated,
+  Platform,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Colors from "@/constants/Colors";
@@ -57,10 +58,10 @@ export default function AppBar({
   const borderBottomWidth = 0;
 
   // Get the current title from the layout context (fallback to Dashboard)
-  let viewTitle = "User Dashboard";
+  let viewTitle = "My Dashboard";
   if (typeof window !== 'undefined') {
     // fallback for SSR
-    viewTitle = document?.title || "User Dashboard";
+    viewTitle = document?.title || "My Dashboard";
   }
 
   const handleSettingsClick = () => {
@@ -105,7 +106,7 @@ export default function AppBar({
               {
                 opacity: titleOpacity,
                 color: '#4fc3f7',
-                fontFamily: 'SpaceMono',
+                fontFamily: Platform.select({ ios: 'System', android: 'Roboto', default: 'sans-serif' }),
               },
             ]}
             numberOfLines={1}

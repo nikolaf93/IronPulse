@@ -1,7 +1,7 @@
 import React, { useRef, useState, createContext, useContext } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs, usePathname } from 'expo-router';
-import { Pressable, View, Text, Animated } from 'react-native';
+import { Pressable, View, Text, Animated, Platform } from 'react-native';
 import Colors from '@/constants/Colors';
 import AppBar from '@/components/AppBar';
 import { useTheme } from '@/components/ThemeContext';
@@ -30,7 +30,7 @@ export default function TabLayout() {
   } else if (pathname.endsWith('/exercises')) {
     viewTitle = 'Exercises';
   } else {
-    viewTitle = 'User Dashboard';
+    viewTitle = 'My Dashboard';
   }
 
   const handleThemeToggle = () => {
@@ -77,7 +77,7 @@ export default function TabLayout() {
               backgroundColor: 'transparent'
             }}
           >
-            <Text style={{ fontSize: 36, fontWeight: 'bold', textAlign: 'center', fontFamily: 'SpaceMono', color: '#4fc3f7' }}>{viewTitle}</Text>
+            <Text style={{ fontSize: 36, fontWeight: 'bold', textAlign: 'center', fontFamily: Platform.select({ ios: 'System', android: 'Roboto', default: 'sans-serif' }), color: '#4fc3f7' }}>{viewTitle}</Text>
           </Animated.View>
         </Animated.View>
         <Tabs

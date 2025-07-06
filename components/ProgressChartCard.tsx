@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import CardStyles from './CardStyles';
 import Svg, { G, Circle } from "react-native-svg";
 import { Text } from "@/components/Themed";
 import Colors from "@/constants/Colors";
@@ -12,7 +13,7 @@ interface ProgressChartCardProps {
   upcoming: number;
 }
 
-const SIZE = 90;
+const SIZE = 120;
 const STROKE_WIDTH = 12;
 const RADIUS = (SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
@@ -48,7 +49,7 @@ const ProgressChartCard: React.FC<ProgressChartCardProps> = ({
   const upcomingLen = CIRCUMFERENCE * upcomingPct;
 
   return (
-    <View style={[styles.cardRow, { backgroundColor: colors.cardBackground }]}>
+    <View style={[CardStyles.card, { backgroundColor: colors.cardBackground }]}>
       <Svg width={SIZE} height={SIZE}>
         <G rotation="270" origin={`${SIZE / 2},${SIZE / 2}`}> 
           {/* Upcoming (gray) - always a full circle */}
@@ -119,20 +120,7 @@ const ProgressChartCard: React.FC<ProgressChartCardProps> = ({
 };
 
 const styles = StyleSheet.create({
-  cardRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 16,
-    padding: 20,
-    width: "100%",
-    marginHorizontal: 10,
-    marginVertical: 10,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-  },
+  // cardRow style is now shared via CardStyles
   infoCol: {
     marginLeft: 24,
     flex: 1,
