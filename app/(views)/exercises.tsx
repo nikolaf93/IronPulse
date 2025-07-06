@@ -11,9 +11,7 @@ export default function ExercisesScreen() {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={styles.container}>
-      <Text style={[styles.title, { color: colors.primary }]}>Exercises</Text>
-      <View style={[styles.separator, { backgroundColor: colors.separator }]} />
-      
+      {/* Title and separator removed, now handled in layout */}
       <Card
         title="Exercise Library"
         content="Discover and track your favorite exercises with detailed instructions and progress tracking."

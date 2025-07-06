@@ -1,7 +1,7 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, View } from 'react-native';
+import { Link, Tabs, usePathname } from 'expo-router';
+import { Pressable, View, Text } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
@@ -19,6 +19,17 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const { isDark, toggleTheme, setTheme } = useTheme();
   const colors = Colors[isDark ? 'dark' : 'light'];
+  const pathname = usePathname();
+
+  // Map pathnames to titles
+  let viewTitle = '';
+  if (pathname.endsWith('/tracking')) {
+    viewTitle = 'Tracking';
+  } else if (pathname.endsWith('/exercises')) {
+    viewTitle = 'Exercises';
+  } else {
+    viewTitle = 'User Dashboard';
+  }
 
   const handleThemeToggle = () => {
     toggleTheme();
@@ -30,7 +41,13 @@ export default function TabLayout() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.cardBackground }}>
-      <AppBar onThemeToggle={handleThemeToggle} onResetSettings={handleResetSettings} />
+      {/* Grouped AppBar and Title */}
+      <View style={{ backgroundColor: colors.cardBackground }}>
+        <AppBar onThemeToggle={handleThemeToggle} onResetSettings={handleResetSettings} />
+        <View style={{ paddingVertical: 32, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.separator }}>
+          <Text style={{ fontSize: 36, fontWeight: 'bold', textAlign: 'center', fontFamily: 'SpaceMono', color: colors.primary }}>{viewTitle}</Text>
+        </View>
+      </View>
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: colors.primary,
@@ -46,21 +63,21 @@ export default function TabLayout() {
           name="index"
           options={{
             title: 'Dashboard',
-            tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />, 
           }}
         />
         <Tabs.Screen
           name="tracking"
           options={{
             title: 'Tracking',
-            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />, 
           }}
         />
         <Tabs.Screen
           name="exercises"
           options={{
             title: 'Exercises',
-            tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />, 
           }}
         />
       </Tabs>

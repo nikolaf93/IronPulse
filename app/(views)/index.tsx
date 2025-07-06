@@ -12,8 +12,7 @@ export default function DashboardScreen() {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={styles.container}>
-      <Text style={[styles.title, { color: colors.primary }]}>User Dashboard</Text>
-      <View style={[styles.separator, { backgroundColor: colors.separator }]} />
+      {/* Title and separator removed, now handled in layout */}
       <Card
         title="Dashboard"
         content="Welcome to IronPulse! Track your fitness progress and achieve your goals."
