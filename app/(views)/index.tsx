@@ -1,5 +1,5 @@
-import React, { useContext, useRef } from 'react';
-import { StyleSheet, Animated } from 'react-native';
+import React, { useContext, useRef, useCallback } from 'react';
+import { StyleSheet, Animated, View, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useTheme } from '@/components/ThemeContext';
 import Card from '@/components/Card';
@@ -26,7 +26,16 @@ export default function DashboardScreen() {
     }, [scrollY]),
   );
 
-  console.log('[TEST] scrollY', scrollY);
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const y = event.nativeEvent.contentOffset.y;
+      if (scrollY && typeof scrollY.setValue === 'function') {
+        scrollY.setValue(y);
+      }
+      lastScrollY.current = y;
+    },
+    [scrollY],
+  );
 
   return (
     <Animated.ScrollView
@@ -34,13 +43,7 @@ export default function DashboardScreen() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.container}
       scrollEventThrottle={16}
-      onScroll={(event) => {
-        const y = event.nativeEvent.contentOffset.y;
-        if (scrollY && typeof scrollY.setValue === 'function') {
-          scrollY.setValue(y);
-        }
-        lastScrollY.current = y;
-      }}
+      onScroll={handleScroll}
     >
       {/* Title and separator removed, now handled in layout */}
       <Card
@@ -55,7 +58,6 @@ export default function DashboardScreen() {
 
       <ViewSection style={{ width: '100%', paddingHorizontal: 20 }} title="Your Trainer" />
       <UserCard name="Alex Johnson" />
-      {/* <View style={{ height: 16 }} /> */}
     </Animated.ScrollView>
   );
 }
