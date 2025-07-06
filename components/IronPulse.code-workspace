@@ -1,10 +1,10 @@
 {
-	"folders": [
-		{
-			"path": ".."
-		},
-		{
-			"path": "../../totalFitness"
-		}
-	]
+  "folders": [
+    {
+      "path": "..",
+    },
+    {
+      "path": "../../totalFitness",
+    },
+  ],
 }

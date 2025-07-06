@@ -29,17 +29,20 @@ A modern fitness tracking mobile application built with React Native and Expo, d
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd IronPulse
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm start
 ```
@@ -91,6 +94,7 @@ IronPulse/
 The app supports both light and dark themes with automatic system preference detection. Users can manually toggle between themes or reset to system default.
 
 ### Theme Features:
+
 - Automatic system preference detection
 - Manual theme toggle
 - Persistent theme storage
@@ -99,6 +103,7 @@ The app supports both light and dark themes with automatic system preference det
 ## 📊 Progress Tracking
 
 The app includes a sophisticated progress tracking system with:
+
 - Visual circular progress charts
 - Weekly progress overview
 - Completed, missed, and upcoming workout tracking
@@ -121,6 +126,7 @@ The project uses TypeScript for type safety and follows React Native best practi
 ## 📦 Dependencies
 
 ### Core Dependencies
+
 - `expo`: ~53.0.17
 - `react`: 19.0.0
 - `react-native`: 0.79.5
@@ -129,6 +135,7 @@ The project uses TypeScript for type safety and follows React Native best practi
 - `styled-components`: ^6.1.19
 
 ### Development Dependencies
+
 - `typescript`: ~5.8.3
 - `@types/react`: ~19.0.10
 - `jest`: ^29.2.1
@@ -143,6 +150,7 @@ The project uses TypeScript for type safety and follows React Native best practi
 ### Configuration
 
 The app is configured in `app.json` with:
+
 - App name: IronPulse
 - Version: 1.0.0
 - Platform-specific settings for iOS, Android, and Web

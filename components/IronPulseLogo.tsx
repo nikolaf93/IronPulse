@@ -1,8 +1,17 @@
+/* eslint-disable react-native/no-raw-text */
 import * as React from 'react';
 import Svg, { Circle, Polyline, Text as SvgText } from 'react-native-svg';
 import { View, StyleSheet } from 'react-native';
 
-export default function IronPulseLogo({ size = 40, color = '#1976d2', iconOnly = false }: { size?: number; color?: string; iconOnly?: boolean }) {
+export default function IronPulseLogo({
+  size = 40,
+  color = '#1976d2',
+  iconOnly = false,
+}: {
+  size?: number;
+  color?: string;
+  iconOnly?: boolean;
+}) {
   return (
     <View style={styles.logoRow}>
       <Svg width={size} height={size} viewBox="0 0 40 40">
@@ -36,7 +45,7 @@ export default function IronPulseLogo({ size = 40, color = '#1976d2', iconOnly =
 
 const styles = StyleSheet.create({
   logoRow: {
-    flexDirection: 'row',
     alignItems: 'center',
+    flexDirection: 'row',
   },
-}); 
+});

@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   title: {
+    color: '#4fc3f7',
+    fontFamily: Platform.select({ ios: 'System', android: 'Roboto', default: 'sans-serif' }),
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#4fc3f7',
-    marginTop: 24,
     marginBottom: 8,
-    fontFamily: Platform.select({ ios: 'System', android: 'Roboto', default: 'sans-serif' }),
+    marginTop: 24,
   },
-}); 
+});

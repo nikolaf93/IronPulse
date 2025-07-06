@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({ title, content }) => {
   const colors = Colors[isDark ? 'dark' : 'light'];
 
   return (
-    <View style={[CardStyles.card, { backgroundColor: colors.cardBackground }]}> 
+    <View style={[CardStyles.card, { backgroundColor: colors.cardBackground }]}>
       <Text style={[styles.cardTitle, { color: colors.accent }]}>{title}</Text>
       {typeof content === 'string' ? (
         <Text style={[styles.cardText, { color: colors.text }]}>{content}</Text>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 16,
-    paddingRight: 20
+    paddingRight: 20,
   },
   cardText: {
     fontSize: 20,
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card; 
+export default Card;

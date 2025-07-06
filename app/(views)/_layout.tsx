@@ -1,8 +1,8 @@
-import React, { useRef, useState, createContext, useContext, useMemo } from 'react';
+import React, { useRef, createContext } from 'react';
 import { useFocusEffect } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs, usePathname } from 'expo-router';
-import { Pressable, View, Text, Animated, Platform } from 'react-native';
+import { Tabs, usePathname } from 'expo-router';
+import { View, Text, Animated, Platform } from 'react-native';
 import Colors from '@/constants/Colors';
 import AppBar from '@/components/AppBar';
 import { useTheme } from '@/components/ThemeContext';
@@ -43,7 +43,7 @@ export default function TabLayout() {
       if (tabKey !== 'index' && scrollY && typeof scrollY.setValue === 'function') {
         scrollY.setValue(0);
       }
-    }, [tabKey, scrollY])
+    }, [tabKey, scrollY]),
   );
 
   // Map pathnames to titles
@@ -97,10 +97,24 @@ export default function TabLayout() {
               borderBottomWidth: 2,
               borderBottomColor: colors.separator,
               overflow: 'hidden',
-              backgroundColor: 'transparent'
+              backgroundColor: 'transparent',
             }}
           >
-            <Text style={{ fontSize: 36, fontWeight: 'bold', textAlign: 'center', fontFamily: Platform.select({ ios: 'System', android: 'Roboto', default: 'sans-serif' }), color: '#4fc3f7' }}>{viewTitle}</Text>
+            <Text
+              style={{
+                fontSize: 36,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                fontFamily: Platform.select({
+                  ios: 'System',
+                  android: 'Roboto',
+                  default: 'sans-serif',
+                }),
+                color: '#4fc3f7',
+              }}
+            >
+              {viewTitle}
+            </Text>
           </Animated.View>
         </Animated.View>
         <Tabs
@@ -119,21 +133,21 @@ export default function TabLayout() {
             name="index"
             options={{
               title: 'Dashboard',
-              tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />, 
+              tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
             }}
           />
           <Tabs.Screen
             name="tracking"
             options={{
               title: 'Tracking',
-              tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />, 
+              tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
             }}
           />
           <Tabs.Screen
             name="exercises"
             options={{
               title: 'Exercises',
-              tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />, 
+              tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />,
             }}
           />
         </Tabs>
