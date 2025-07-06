@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useRef, useState, createContext, useContext } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs, usePathname } from 'expo-router';
-import { Pressable, View, Text } from 'react-native';
-
+import { Pressable, View, Text, Animated } from 'react-native';
 import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
 import AppBar from '@/components/AppBar';
 import { useTheme } from '@/components/ThemeContext';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+// Context to share scrollY between screen and AppBar
+export const ScrollContext = createContext<null | { scrollY: Animated.Value }>(null);
+
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
@@ -20,6 +20,8 @@ export default function TabLayout() {
   const { isDark, toggleTheme, setTheme } = useTheme();
   const colors = Colors[isDark ? 'dark' : 'light'];
   const pathname = usePathname();
+  // Create a single Animated.Value for scrollY
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   // Map pathnames to titles
   let viewTitle = '';
@@ -39,48 +41,80 @@ export default function TabLayout() {
     setTheme('system');
   };
 
+  // Animation for large title
+  const TITLE_FADE_SCROLL = 40;
+  const TITLE_COLLAPSE_SCROLL = 60;
+  const largeTitleOpacity = scrollY.interpolate({
+    inputRange: [0, TITLE_FADE_SCROLL],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
+  const largeTitleHeight = scrollY.interpolate({
+    inputRange: [0, TITLE_COLLAPSE_SCROLL],
+    outputRange: [64, 0],
+    extrapolate: 'clamp',
+  });
+  // Animate background color for wrapper below AppBar
+  const wrapperBgColor = '#202a44';
+
   return (
-    <View style={{ flex: 1, backgroundColor: colors.cardBackground }}>
-      {/* Grouped AppBar and Title */}
-      <View style={{ backgroundColor: colors.cardBackground }}>
+    <ScrollContext.Provider value={{ scrollY }}>
+      <View style={{ flex: 1, backgroundColor: colors.cardBackground }}>
+        {/* AppBar always shows logo and animates small title */}
         <AppBar onThemeToggle={handleThemeToggle} onResetSettings={handleResetSettings} />
-        <View style={{ paddingVertical: 32, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.separator }}>
-          <Text style={{ fontSize: 36, fontWeight: 'bold', textAlign: 'center', fontFamily: 'SpaceMono', color: colors.primary }}>{viewTitle}</Text>
-        </View>
+        {/* Dark blue background wrapper for large title and area below AppBar */}
+        <Animated.View style={{ backgroundColor: wrapperBgColor }}>
+          {/* Animated large title section */}
+          <Animated.View
+            style={{
+              opacity: largeTitleOpacity,
+              height: largeTitleHeight,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderBottomWidth: 2,
+              borderBottomColor: colors.separator,
+              overflow: 'hidden',
+              backgroundColor: 'transparent'
+            }}
+          >
+            <Text style={{ fontSize: 36, fontWeight: 'bold', textAlign: 'center', fontFamily: 'SpaceMono', color: '#4fc3f7' }}>{viewTitle}</Text>
+          </Animated.View>
+        </Animated.View>
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: colors.primary,
+            tabBarInactiveTintColor: colors.tabIconDefault,
+            tabBarStyle: {
+              backgroundColor: colors.cardBackground,
+              borderTopColor: colors.separator,
+              borderTopWidth: 1,
+            },
+            headerShown: false,
+          }}
+        >
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: 'Dashboard',
+              tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />, 
+            }}
+          />
+          <Tabs.Screen
+            name="tracking"
+            options={{
+              title: 'Tracking',
+              tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />, 
+            }}
+          />
+          <Tabs.Screen
+            name="exercises"
+            options={{
+              title: 'Exercises',
+              tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />, 
+            }}
+          />
+        </Tabs>
       </View>
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: colors.primary,
-          tabBarInactiveTintColor: colors.tabIconDefault,
-          tabBarStyle: {
-            backgroundColor: colors.cardBackground,
-            borderTopColor: colors.separator,
-            borderTopWidth: 1,
-          },
-          headerShown: false,
-        }}>
-        <Tabs.Screen
-          name="index"
-          options={{
-            title: 'Dashboard',
-            tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />, 
-          }}
-        />
-        <Tabs.Screen
-          name="tracking"
-          options={{
-            title: 'Tracking',
-            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />, 
-          }}
-        />
-        <Tabs.Screen
-          name="exercises"
-          options={{
-            title: 'Exercises',
-            tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />, 
-          }}
-        />
-      </Tabs>
-    </View>
+    </ScrollContext.Provider>
   );
 }

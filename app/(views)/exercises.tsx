@@ -1,22 +1,33 @@
-import { StyleSheet, ScrollView } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import React, { useContext } from 'react';
+import { StyleSheet, Animated } from 'react-native';
+import { View } from '@/components/Themed';
 import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
 import { useTheme } from '@/components/ThemeContext';
 import Card from '@/components/Card';
+import { ScrollContext } from './_layout';
 
 export default function ExercisesScreen() {
   const { isDark } = useTheme();
   const colors = Colors[isDark ? 'dark' : 'light'];
+  const scrollContext = useContext(ScrollContext);
+  const scrollY = scrollContext?.scrollY;
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colors.background }} contentContainerStyle={styles.container}>
+    <Animated.ScrollView
+      style={{ flex: 1, backgroundColor: colors.background }}
+      contentContainerStyle={styles.container}
+      scrollEventThrottle={16}
+      onScroll={scrollY ? Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: false }
+      ) : undefined}
+    >
       {/* Title and separator removed, now handled in layout */}
       <Card
         title="Exercise Library"
         content="Discover and track your favorite exercises with detailed instructions and progress tracking."
       />
-    </ScrollView>
+    </Animated.ScrollView>
   );
 }
 
@@ -26,19 +37,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 16,
     paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 12,
-    fontFamily: 'SpaceMono',
-  },
-  separator: {
-    marginVertical: 24,
-    height: 1,
-    width: '100%',
-    marginHorizontal: 10,
   },
   card: {
     width: '100%',
