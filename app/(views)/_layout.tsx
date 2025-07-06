@@ -1,4 +1,5 @@
-import React, { useRef, useState, createContext, useContext } from 'react';
+import React, { useRef, useState, createContext, useContext, useMemo } from 'react';
+import { useFocusEffect } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs, usePathname } from 'expo-router';
 import { Pressable, View, Text, Animated, Platform } from 'react-native';
@@ -20,8 +21,30 @@ export default function TabLayout() {
   const { isDark, toggleTheme, setTheme } = useTheme();
   const colors = Colors[isDark ? 'dark' : 'light'];
   const pathname = usePathname();
-  // Create a single Animated.Value for scrollY
-  const scrollY = useRef(new Animated.Value(0)).current;
+  // Create a separate Animated.Value for each tab
+  const scrollYMap = useRef<Record<string, Animated.Value>>({
+    index: new Animated.Value(0),
+    tracking: new Animated.Value(0),
+    exercises: new Animated.Value(0),
+  }).current;
+
+  // Determine current tab key
+  let tabKey = 'index';
+  if (pathname.endsWith('/tracking')) tabKey = 'tracking';
+  else if (pathname.endsWith('/exercises')) tabKey = 'exercises';
+
+  // Use the correct scrollY for the current tab
+  const scrollY = scrollYMap[tabKey];
+
+  // If not on dashboard, always expand header (reset scrollY to 0)
+  useFocusEffect(
+    React.useCallback(() => {
+      // For non-dashboard tabs, always expand header (reset scrollY to 0)
+      if (tabKey !== 'index' && scrollY && typeof scrollY.setValue === 'function') {
+        scrollY.setValue(0);
+      }
+    }, [tabKey, scrollY])
+  );
 
   // Map pathnames to titles
   let viewTitle = '';

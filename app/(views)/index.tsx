@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { StyleSheet, Animated, SafeAreaView } from "react-native";
 import { View } from "@/components/Themed";
 import Colors from "@/constants/Colors";
@@ -8,26 +8,41 @@ import ProgressChartCard from "@/components/ProgressChartCard";
 import ViewSection from "@/components/ViewSection";
 import { ScrollContext } from "./_layout";
 import UserCard from "@/components/UserCard";
+import { usePathname, useFocusEffect } from 'expo-router';
 
 export default function DashboardScreen() {
   const { isDark } = useTheme();
   const colors = Colors[isDark ? "dark" : "light"];
   const scrollContext = useContext(ScrollContext);
   const scrollY = scrollContext?.scrollY;
+  const pathname = usePathname();
+  const scrollViewRef = useRef(null);
+  const lastScrollY = useRef(0);
+
+  // On focus, sync scrollY to lastScrollY so header matches scroll position
+  useFocusEffect(
+    React.useCallback(() => {
+      if (scrollY && typeof scrollY.setValue === 'function') {
+        scrollY.setValue(lastScrollY.current);
+      }
+    }, [scrollY])
+  );
+
+  console.log('[TEST] scrollY', scrollY);
 
   return (
     <Animated.ScrollView
+      ref={scrollViewRef}
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={styles.container}
       scrollEventThrottle={16}
-      onScroll={
-        scrollY
-          ? Animated.event(
-              [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-              { useNativeDriver: false }
-            )
-          : undefined
-      }
+      onScroll={event => {
+        const y = event.nativeEvent.contentOffset.y;
+        if (scrollY && typeof scrollY.setValue === 'function') {
+          scrollY.setValue(y);
+        }
+        lastScrollY.current = y;
+      }}
     >
       {/* Title and separator removed, now handled in layout */}
       <Card
